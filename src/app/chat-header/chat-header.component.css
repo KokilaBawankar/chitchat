@@ -1,0 +1,14 @@
+.chat-header{
+  margin: 0;
+  padding: 0px 30px;
+  display: -webkit-box;
+  background-color: antiquewhite;
+}
+.chat-header > .header-text{
+  padding: 0px 100px 0px 0px;
+}
+.chat-header > .close-icon{
+  width: 30px;
+  height: 30px;
+  padding-top: 20px ;
+}

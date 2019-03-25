@@ -1,22 +1,32 @@
-.chat-app {
+.wallpaper{
+  background-image: url("../assets/wallpaper.jpeg");
+  background-size: cover;
+  left: 0;
+  top: 0;
+  height: 100%;
   margin: 0;
   padding: 0;
+  position: absolute;
+  width: 100%;
+  opacity: 0.5;
+}
+.chat-app {
+  border: 1px solid white;
+  border-radius: 10px;
+  display: block;
   height: 550px;
+  overflow-y: scroll;
   width: 50%;
-  transform: translate(50%, 0%);
-  border: 1px solid green;
+  transform: translate(50%, 5%);
 }
 
-.chat-app > .chat-icon {
-  border-radius: 50%;
-  border: 1px solid darkslateblue;
-  height: 50px;
-  width: 50px;
-  bottom: 0;
+.chat-icon {
+  bottom: 50px;
+  height: 100px;
+  line-height: 49px;
   position: fixed;
-  right: 0;
+  right: 50px;
   text-align: center;
   vertical-align: middle;
-  line-height: 49px;
-  margin: 10px;
+  width: 100px;
 }

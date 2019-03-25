@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {ChatService} from './chat.service';
+import {WebsocketService} from './websocket.service';
 
 @Component({
   selector: 'app-root',
@@ -11,15 +12,11 @@ export class AppComponent {
   constructor(public chatService: ChatService) {
     this.chatService.connectionEstablishedEvent.subscribe((isConnected: boolean) => {
       if (isConnected) {
+        this.chatService.isConnected = true;
         this.chatService.message.subscribe(data => {
           console.log('Message received', data);
         });
       }
     });
-  }
-
-  sendMessage() {
-    this.chatService.message.next('Echo message');
-    console.log('Message sent.');
   }
 }

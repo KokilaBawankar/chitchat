@@ -33,12 +33,12 @@ export class WebsocketService {
         if (this.wsServer.readyState === WebSocket.OPEN) {
           this.wsServer.send(JSON.stringify(data));
         }
+      },
+      complete: (data: Object) => {
+        this.wsServer.close();
+        console.log('Disconnecting.');
       }
     }
     return Rx.Subject.create(observer, observable);
-  }
-
-  sendMessage (message) {
-    this.wsServer.send(message);
   }
 }
