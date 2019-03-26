@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { ChatHeaderComponent } from './chat-header/chat-header.component';
 import { ChatBoxComponent } from './chat-box/chat-box.component';
 import { ChatFooterComponent } from './chat-footer/chat-footer.component';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { ChatFooterComponent } from './chat-footer/chat-footer.component';
     ChatFooterComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

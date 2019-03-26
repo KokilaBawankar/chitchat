@@ -9,6 +9,7 @@ import {Subject} from 'rxjs';
 export class ChatService {
 
   public message: Subject<any>;
+  public username: string;
   public connectionEstablishedEvent: EventEmitter<boolean> = new EventEmitter(false);
   isConnected = false;
 
@@ -21,8 +22,13 @@ export class ChatService {
   }
 
   sendMessage(message?: string) {
-    this.message.next(message ? message : 'Echo message');
-    console.log('Message sent.');
+    const msgToSend = {
+      fromUser: this.username,
+      message : message ? message : 'Test msg',
+      type: 'chat'
+    }
+    this.message.next(msgToSend);
+    console.log('Message sent.', msgToSend);
   }
 
   close() {
