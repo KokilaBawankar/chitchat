@@ -36,3 +36,5 @@
   width: 100%;
   overflow-y: scroll;
 }
+
+.fa { transform: scale(2, 2); }

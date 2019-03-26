@@ -26,7 +26,18 @@ export class ChatService {
       to: 'ChitChat Bot',
       from: this.username,
       message : message ? message : 'Test msg',
-      type: 'chat'
+      type: 'broadcast'
+    }
+    this.message.next(msgToSend);
+    console.log('Message sent.', msgToSend);
+  }
+
+  getOnlineUsers() {
+    const msgToSend = {
+      to: 'ChitChat Server',
+      from: this.username,
+      message: 'Send online users list.',
+      type: 'onlineUsers'
     }
     this.message.next(msgToSend);
     console.log('Message sent.', msgToSend);
