@@ -84,20 +84,30 @@
         </div>
 
         <div class="col-md-6">
-          <div *ngIf="onlineUsers.length != 0 && showOnlineUsers">
-            <ul class="list-group">
-              <li class="list-group-item" *ngFor="let user of onlineUsers" (click)="goToSpecificUserChat(user)">
-                <span>{{user}}</span>
-              </li>
-            </ul>
-          </div>
-          <div *ngIf="onlineUsers.length == 0 && showOnlineUsers">No user is online</div>
-        </div>
 
+        <div *ngIf="onlineUsers.length != 0 && showOnlineUsers">
+          <div style="float: right;right: 0;margin: 10px" (click)="showOnlineUsers = false;">
+            <svg height="30px" width="30px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                 x="0px" y="0px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+              <circle style="fill:#e78a00;" cx="25" cy="25" r="25"/>
+              <polyline style="fill:none;stroke:#FFFFFF;stroke-width:2;stroke-linecap:round;stroke-miterlimit:10;"
+                        points="16,34 25,25 34,16 	"/>
+              <polyline style="fill:none;stroke:#FFFFFF;stroke-width:2;stroke-linecap:round;stroke-miterlimit:10;"
+                        points="16,16 25,25 34,34"/></svg>
+          </div>
+          <ul class="list-group">
+            <li class="list-group-item" *ngFor="let user of onlineUsers" (click)="goToSpecificUserChat(user)">
+              <span>{{user}}</span>
+            </li>
+          </ul>
+        </div>
+        <div *ngIf="onlineUsers.length == 0 && showOnlineUsers">No user is online</div>
       </div>
 
     </div>
+
   </div>
+</div>
 </div>
 
 
