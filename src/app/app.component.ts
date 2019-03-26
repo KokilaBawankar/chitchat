@@ -19,9 +19,9 @@ export class AppComponent {
           if (message.type !== 'open' && message.type !== 'close') {
             const msg = JSON.parse(message.data);
             if (msg.type === 'greet') {
-              this.chatService.username = msg.toUser;
+              this.chatService.username = msg.to;
             }
-            this.displayMessage(msg.message);
+            this.displayMessage(msg.from, msg.message);
           }
         });
       }
@@ -30,13 +30,13 @@ export class AppComponent {
 
   sendMessage() {
     this.chatService.sendMessage(this.messageText);
-    this.displayMessage(this.messageText);
+    this.displayMessage(this.chatService.username, this.messageText);
     this.messageText = '';
   }
 
-  displayMessage(message: string) {
+  displayMessage(username: string, message: string) {
     const p = document.createElement('p');
-    p.innerHTML = message;
+    p.innerHTML = username + ' : ' + message;
     this.chatBox.nativeElement.appendChild(p);
   }
 }

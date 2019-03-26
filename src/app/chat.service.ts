@@ -23,7 +23,8 @@ export class ChatService {
 
   sendMessage(message?: string) {
     const msgToSend = {
-      fromUser: this.username,
+      to: 'ChitChat Bot',
+      from: this.username,
       message : message ? message : 'Test msg',
       type: 'chat'
     }
