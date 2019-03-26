@@ -15,6 +15,7 @@ export class AppComponent {
   chatWithSpecificUsername: string;
 
   constructor(public chatService: ChatService) {
+
     this.chatService.connectionEstablishedEvent.subscribe((isConnected: boolean) => {
       if (isConnected) {
         this.chatService.isConnected = true;
@@ -22,7 +23,7 @@ export class AppComponent {
         this.chatService.message.subscribe(message => {
           console.log('Message received', message);
           if (message.type !== 'open' && message.type !== 'close') {
-            console.log('**', message.data);
+
             const msg = JSON.parse(message.data);
             if (msg.type === 'greet') {
 
@@ -31,17 +32,17 @@ export class AppComponent {
 
             } else if (msg.type === 'onlineUsers') {
 
-              this.onlineUsers = msg.message;
+              this.onlineUsers = msg.userList;
               this.showOnlineUsers = true;
 
             } else if (msg.type === 'chatWithSpecificUser') {
 
               this.chatWithSpecificUsername !== msg.from ? this.goToSpecificUserChat(msg.from) : null;
-              this.displayMessage(msg.from, msg.message);
+              msg.message ? this.displayMessage(msg.from, msg.message) : this.displayImage(msg.from, msg.image);
 
             } else {
 
-              this.displayMessage(msg.from, msg.message);
+              msg.message ? this.displayMessage(msg.from, msg.message) : this.displayImage(msg.from, msg.image);
 
             }
           }
@@ -51,9 +52,10 @@ export class AppComponent {
     });
   }
 
-  sendMessage() {
-    this.chatService.sendMessage(this.messageText, this.chatWithSpecificUsername ? this.chatWithSpecificUsername : null);
-    this.displayMessage(this.chatService.username, this.messageText);
+  sendMessage(message: string, image: string) {
+    this.chatService.sendMessage(this.chatWithSpecificUsername ? this.chatWithSpecificUsername : null, message, image);
+    message !== null ? this.displayMessage(this.chatService.username, this.messageText)
+                     : this.displayImage(this.chatService.username, image);
     this.messageText = '';
   }
 
@@ -67,6 +69,17 @@ export class AppComponent {
     this.chatBox.nativeElement.appendChild(p);
   }
 
+  displayImage(username: string, image) {
+    const span = document.createElement('span');
+    span.innerHTML = username + ' : ';
+    this.chatBox.nativeElement.appendChild(span);
+    const img = document.createElement('img');
+    img.src = image;
+    img.height = 100;
+    img.width = 100;
+    this.chatBox.nativeElement.appendChild(img);
+  }
+
   goToSpecificUserChat(username: string) {
     while (this.chatBox.nativeElement.firstChild) {
       this.chatBox.nativeElement.removeChild(this.chatBox.nativeElement.firstChild);
@@ -75,5 +88,35 @@ export class AppComponent {
     h3.innerHTML = username;
     this.chatBox.nativeElement.appendChild(h3);
     this.chatWithSpecificUsername = username;
+  }
+
+  sendImage() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    setTimeout(function() {
+      input.click();
+    }, 200);
+
+    input.onchange = function(event) {
+      console.log(event.target.files);
+      this.getImageData(event.target.files[0])
+        .then((imageData: string) => this.sendMessage(null, imageData));
+    }.bind(this);
+  }
+
+  getImageData(image) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(image);
+      reader.onload = () => {
+        console.log('Selected image data', reader.result );
+        return resolve(reader.result);
+      };
+      reader.onerror = (error) => {
+        console.log('Error in getting image data', error );
+        return resolve(error);
+      };
+    });
   }
 }

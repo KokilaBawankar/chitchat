@@ -21,12 +21,18 @@ export class ChatService {
     this.connectionEstablishedEvent.emit(true);
   }
 
-  sendMessage(message: string, toUser: string) {
+  sendMessage(toUser: string, message?: string, image?: string) {
     const msgToSend = {
-      to: toUser != null ? toUser : 'ChitChat Bot',
+      to: toUser != null ? toUser : 'ChitChat Server',
       from: this.username,
-      message : message,
-      type: toUser != null ? 'chatWithSpecificUser' : 'broadcast'
+      type: toUser != null ? 'chatWithSpecificUser' : 'broadcast',
+      subType: image ? 'image' : 'text'
+    };
+    if (message !== null) {
+      msgToSend['message'] = message;
+
+    } else {
+      msgToSend['image'] = image;
     }
     this.message.next(msgToSend);
     console.log('Message sent.', msgToSend);

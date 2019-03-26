@@ -21,10 +21,12 @@ wsServer.on('request', function (request) {
   usersCount++;
 
   connection.on('message', function (message) {
+
     console.log('Message received ', message);
     var msg = JSON.parse(message.utf8Data);
 
     if(msg.type == 'broadcast') {
+      console.log('broadcast');
       for(let i = 0 ; i < users.length ; i++ ){
         if(users[i].id != msg.from)
           users[i].connObject.sendUTF(message.utf8Data);
@@ -32,11 +34,17 @@ wsServer.on('request', function (request) {
     }
 
     if(msg.type == 'chatWithSpecificUser') {
+      console.log('chatWithSpecificUser');
       const msgToSend = {
         to: msg.to,
         from: msg.from,
-        message: msg.message,
         type: 'chatWithSpecificUser'
+      };
+      if (msg.message) {
+        msgToSend['message'] = msg.message;
+
+      } else {
+        msgToSend['image'] = msg.image;
       }
       for(let i = 0 ; i < users.length ; i++ ){
         if(users[i].id == msg.to){
@@ -47,6 +55,7 @@ wsServer.on('request', function (request) {
     }
 
     if(msg.type == 'onlineUsers') {
+      console.log('onlineUsers');
       var usersList = [];
       for(let j = 0 ; j < users.length; j++){
         if (users[j].id != msg.from) {
@@ -56,12 +65,13 @@ wsServer.on('request', function (request) {
       const msgToSend = {
         to: msg.from,
         from: 'ChitChat Server',
-        message: usersList.length != 0 ? usersList : [],
+        userList: usersList.length != 0 ? usersList : [],
         type: 'onlineUsers'
       }
       connection.sendUTF(JSON.stringify(msgToSend));
     }
   });
+
   connection.on('close', function (connection) {
     console.log('Connection closed ', connection);
   });
