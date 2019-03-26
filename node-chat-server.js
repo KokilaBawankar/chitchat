@@ -25,19 +25,38 @@ wsServer.on('request', function (request) {
     var msg = JSON.parse(message.utf8Data);
 
     if(msg.type == 'broadcast') {
-      for(var i = 0 ; i < users.length ; i++ ){
+      for(let i = 0 ; i < users.length ; i++ ){
         if(users[i].id != msg.from)
           users[i].connObject.sendUTF(message.utf8Data);
       }
     }
 
+    if(msg.type == 'chatWithSpecificUser') {
+      const msgToSend = {
+        to: msg.to,
+        from: msg.from,
+        message: msg.message,
+        type: 'chatWithSpecificUser'
+      }
+      for(let i = 0 ; i < users.length ; i++ ){
+        if(users[i].id == msg.to){
+          users[i].connObject.sendUTF(JSON.stringify(msgToSend));
+          break;
+        }
+      }
+    }
+
     if(msg.type == 'onlineUsers') {
       var usersList = [];
-      usersList = users.map(user => {return user.id});
+      for(let j = 0 ; j < users.length; j++){
+        if (users[j].id != msg.from) {
+          usersList.push(users[j].id);
+        }
+      }
       const msgToSend = {
         to: msg.from,
         from: 'ChitChat Server',
-        message: usersList,
+        message: usersList.length != 0 ? usersList : [],
         type: 'onlineUsers'
       }
       connection.sendUTF(JSON.stringify(msgToSend));

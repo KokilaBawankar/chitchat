@@ -60,11 +60,12 @@
         <div style="display: -webkit-box">
           <div class="col-md-6"*ngIf="onlineUsers.length != 0 && showOnlineUsers">
             <ul class="list-group">
-              <li class="list-group-item" *ngFor="let user of onlineUsers">
+              <li class="list-group-item" *ngFor="let user of onlineUsers" (click)="goToSpecificUserChat(user)">
                 <span>{{user}}</span>
               </li>
             </ul>
           </div>
+          <div *ngIf="onlineUsers.length == 0 && showOnlineUsers">No user is online</div>
 
           <div class="col-md-6">
             <div #chatBox></div>
