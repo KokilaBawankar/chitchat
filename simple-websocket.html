@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple-WebSocket</title>
+</head>
+
+<script>
+  var CONNECTION;
+  connect = function () {
+    CONNECTION = new WebSocket('ws://127.0.0.1:5000');
+    console.log(CONNECTION);
+
+    CONNECTION.onmessage = function (evt) {
+      console.log('Message received: ', evt);
+    }
+
+    CONNECTION.onerror = function (evt) {
+      console.log(evt);
+    }
+  }
+
+  sendMsg = function (message) {
+    CONNECTION.send(message);
+    console.log('Message sent');
+  }
+
+  close = function () {
+    CONNECTION.disconnect();
+    console.log('Connection closed!');
+  }
+
+</script>
+<body>
+<h1>Simple WebSocket</h1>
+<button type="button" style="width: 200px; margin: 15px; padding: 10px;" onclick="connect()">Connect</button><br/>
+<input type="text" placeholder="Type your message" style="width: 200px; margin: 15px; padding: 10px;" id="message">
+<button type="button" style="width: 200px; margin: 15px; padding: 10px;" onclick="sendMsg(document.getElementById('message').value)">Send Message</button><br/>
+<button type="button" style="width: 200px; margin: 15px; padding: 10px;">Close</button>
+</body>
+</html>

@@ -1,0 +1,58 @@
+Instructions to take build for Angular Elements:
+
+- In order to have elements functionality available we need the Angular library and a polyfill 
+  ng add @angular/elements
+
+- Complete code should be the part of custom component that you want to use as Angular Element.
+ (App component should not contain single line of code).
+
+- Remove App component from declarations array from app.module, remove the import and also remove from bootstrap array too.
+
+- In app.module, add the custom component that you want to use as Angular Element to the declaration array and to entry components array.
+  (As our custom component is not part any other component and alse we are not specifying our custom component as root of an
+   Angular Application, we need to specifically tell Angular to compile it: for this we put it on the entryComponent array.)
+
+- In app.module, inject Injector as dependency in the constructor's parameter. Then create instance of custom element using
+  createCustomElement ( import from '@angular/elements' ). Then define this instance in custom element registry.
+
+- We also need to tell Angular to use this module for bootstrapping, hence the ngDoBootstrap method.
+
+  export class AppModule {
+    constructor(private injector: Injector) {
+      const customChatApp = createCustomElement(ChatComponent, {injector});
+      customElements.define('custom-chat-app', customChatApp );
+    }
+    ngDoBootstrap() {}
+  }
+
+- Add following to scripts in the package.json in scripts array. In order to build we will use a standard ng build command,
+  but since it outputs 4 files (runtime.js , scripts.js, polyfills.js and main.js) and we’d like to distribute our component as a
+  single js file, we need to turn hashing file names off to know what are the names of files to manually concatenate in a moment.
+
+  "build-angular-element": "ng build --prod --output-hashing=none",
+  "package": "cat dist/chitchat/{runtime,polyfills,scripts,main}.js | gzip > elements.js.gz"
+
+- Then include the element.js file in any other framework project or simply to test include it using script using index.html
+  and use the custom component as Angular element by using the selector of that component as
+
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <title>Angular Element</title>
+  </head>
+  <script type="text/javascript" src="elements.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <body>
+  <custom-chat-app></custom-chat-app>
+  </body>
+  </html>
+
+
+
+Note:  If you are external css or anything for the custom elemnts UI or for anything else include that css also as above
+       font-awesome.min.css bootstrap.min.css.
+
+
+- Serve this index.html using the lite-server
